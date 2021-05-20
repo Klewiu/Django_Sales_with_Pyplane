@@ -8,7 +8,14 @@ sales list
 sales list
 <br>
 {% for obj in object_list %}
-    <a href="{{obj.get_absolute_url}}">{{obj.transaction_id}}</a>
+    <div class="card mb-3">
+        <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.transaction_id}}</a>
+    </div>
+<!--     powyzsze lacze mozna tez zrobic za pomoca -->
+<!--  {% url 'sales: detail' obj.pk }}  po url nazwa aplikacji tj sales i nazwa sciezki i obj bo jestesmy w CBV -->
+<!--    <div class="card mb-3">-->
+<!--        <a href="{% url 'sales:detail' obj.pk %}" class="card-body">{{obj.transaction_id}}</a>-->
+<!--    </div>-->
 
 {% endfor %}
 

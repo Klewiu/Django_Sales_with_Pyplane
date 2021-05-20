@@ -1,4 +1,4 @@
-import  uuid
+import uuid
 
 
 def generate_code():

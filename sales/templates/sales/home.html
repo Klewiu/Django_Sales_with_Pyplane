@@ -6,7 +6,7 @@ home
 {% endblock title %}
 
 {% block content %}
-{{hello}}
+
 <hr>
 
 <form action="" method="POST">
@@ -17,5 +17,14 @@ home
     </div>
 
 </form>
-
+<br>
+    {% if sales_df %}
+        {{ sales_df | safe }}
+        <br>
+         <div class="col-3">
+            {{ positions_df | safe }}
+         </div>
+    {% else %}
+        <h4>No data</h4>
+{% endif %}
 {% endblock content%}
