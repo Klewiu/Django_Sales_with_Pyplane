@@ -19,11 +19,17 @@ home
 </form>
 <br>
     {% if sales_df %}
+        sales df
         {{ sales_df | safe }}
         <br>
-         <div class="col-3">
-            {{ positions_df | safe }}
-         </div>
+        positions df
+        {{ positions_df | safe }}
+        <br>
+        merged df
+        {{ merged_df | safe }}
+        <br>
+        grouped by df
+        {{ df | safe }}
     {% else %}
         <h4>No data</h4>
 {% endif %}
