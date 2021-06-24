@@ -2,17 +2,24 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Sale
 from .forms import SalesSearchForm
+from reports.forms import ReportForm
 import pandas as pd
-from .utils import get_customer_from_id,get_salesman_from_id
+from .utils import get_customer_from_id, get_salesman_from_id, get_chart
+
 
 # Create your views here.
 
 def home_view(request):
-    form = SalesSearchForm(request.POST or None)
+
     sales_df = None
     positions_df = None
     merged_df = None
     df = None
+    chart = None
+
+    search_form = SalesSearchForm(request.POST or None)
+    report_form = ReportForm()
+
     if request.method == 'POST':
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
@@ -42,6 +49,8 @@ def home_view(request):
 
             df = merged_df.groupby('transaction_id', as_index=False, )['price'].agg('sum')
 
+            chart = get_chart(chart_type,df, labels=df['transaction_id'].values)
+
             sales_df = sales_df.to_html(classes='table table-striped table-responsive')
             positions_df = positions_df.to_html(classes='table table-striped')
             merged_df = merged_df.to_html(classes='table table-striped')
@@ -50,11 +59,13 @@ def home_view(request):
             print('no data')
 
     context = {
-        'form': form,
+        'search_form': search_form,
+        'report_form': report_form,
         'sales_df': sales_df,
         'positions_df': positions_df,
         'merged_df': merged_df,
         "df": df,
+        'chart':chart,
     }
     return render(request,"sales/home.html", context)
 
