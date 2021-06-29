@@ -31,6 +31,12 @@ home
   </div>
 </div>
 <hr>
+{% if no_data %}
+     <div class="alert alert-warning" role="alert">
+         {{ no_data }}
+    </div>
+{% endif %}
+
 
 <form action="" method="POST">
     {% csrf_token %}
@@ -54,11 +60,9 @@ home
         grouped by df
         {{ df | safe }}
         <br>
-        Chart
         <img src="data:image/png;base64, {{ chart | safe }}" id ='img'>
-    {% else %}
-        <h4>No data</h4>
 {% endif %}
 <br>
-<button class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">>add report</button>
+<button class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
 {% endblock content%}
+

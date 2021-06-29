@@ -10,12 +10,14 @@ from .utils import get_customer_from_id, get_salesman_from_id, get_chart
 # Create your views here.
 
 def home_view(request):
-
+    key = None
     sales_df = None
     positions_df = None
     merged_df = None
     df = None
     chart = None
+    no_data = None
+
 
     search_form = SalesSearchForm(request.POST or None)
     report_form = ReportForm()
@@ -24,6 +26,7 @@ def home_view(request):
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
         chart_type = request.POST.get('chart_type')
+        result_by = request.POST.get('result_by')
 
         sale_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
         if len(sale_qs) > 0:
@@ -49,14 +52,14 @@ def home_view(request):
 
             df = merged_df.groupby('transaction_id', as_index=False, )['price'].agg('sum')
 
-            chart = get_chart(chart_type,df, labels=df['transaction_id'].values)
+            chart = get_chart(chart_type,sales_df, result_by) #labels=df['transaction_id'].values)
 
             sales_df = sales_df.to_html(classes='table table-striped table-responsive')
             positions_df = positions_df.to_html(classes='table table-striped')
             merged_df = merged_df.to_html(classes='table table-striped')
             df = df.to_html(classes='table table-striped')
         else:
-            print('no data')
+            no_data = 'No data is available in this date range'
 
     context = {
         'search_form': search_form,
@@ -66,6 +69,7 @@ def home_view(request):
         'merged_df': merged_df,
         "df": df,
         'chart':chart,
+        'no_data': no_data,
     }
     return render(request,"sales/home.html", context)
 
